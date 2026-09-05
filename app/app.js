@@ -40,4 +40,25 @@ if (logoutButton) {
     });
 }
 
+const searchInput = document.getElementById('search-input');
+const searchButton = document.getElementById('search-button');
+const products = document.querySelectorAll('.product');
+
+if (searchButton) {
+    searchButton.addEventListener('click', () => {
+        const searchTerm = searchInput.value.toLowerCase();
+
+        products.forEach(product => {
+            const productName = product.dataset.name;
+
+            if (productName.includes(searchTerm)) {
+                product.style.display = '';
+            } else {
+                product.style.display = 'none';
+            }
+
+        });
+    });
+}
+
 
