@@ -61,4 +61,58 @@ if (searchButton) {
     });
 }
 
+const categoryFilter = document.getElementById('category-filter');
 
+if (categoryFilter) {
+    categoryFilter.addEventListener('change', () => {
+        const selectedCategory = categoryFilter.value;
+
+        products.forEach(product => {
+            const productCategory = product.dataset.category;
+
+            if (
+                selectedCategory === 'all' ||
+                productCategory === selectedCategory
+            ) {
+                product.style.display = '';
+            } else {
+                product.style.display = 'none';
+            }
+        });
+    });
+}
+
+let cart = [];
+
+const cartItems = document.getElementById('cart-items');
+
+const addToCartButtons = document.querySelectorAll('.product button');
+
+addToCartButtons.forEach(button => {
+    button.addEventListener('click', () => {
+        const product = button.closest('.product');
+        const productName = product.dataset.name;
+
+        const existingProduct = cart.find(item => item.name === productName);
+        if (existingProduct) {
+            existingProduct.quantity++;
+        } else {
+            cart.push({
+                name: productName,
+                quantity: 1
+            });
+        }
+        
+        cartItems.innerHTML = '';
+
+        cart.forEach(item => {
+            const cartItem = document.createElement('p');
+
+            cartItem.textContent = `${item.name} - Quantity: ${item.quantity}`;
+
+            cartItems.appendChild(cartItem);
+        });
+
+        console.log(cart);
+    });
+});

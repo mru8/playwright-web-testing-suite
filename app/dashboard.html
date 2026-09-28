@@ -17,31 +17,44 @@
             <input type="text" id="search-input" placeholder="Search products">
             <button id="search-button">Search</button>
         </div>
+        
+        <div class="filter-section">
+            <label for="category-filter">Filter by category:</label>
+            <select id="category-filter">
+                <option value="all">All</option>
+                <option value="Electronics">Electronics</option>
+                <option value="Clothing">Clothing</option>
+                <option value="Footwear">Footwear</option>
+            </select>
+        </div>
 
+        <h2>Cart</h2>
+        <div id="cart-items"></div>
+        
         <h2>Products</h2>
         <div class="product-list">
-            <div class="product" data-name="laptop">
+            <div class="product" data-name="laptop" data-category="Electronics">
                 <h3>Laptop</h3>
                 <p>Category: Electronics</p>
                 <p>Rs. 60,000</p>
                 <button>Add to Cart</button>
             </div>
 
-            <div class="product" data-name="headphones">
+            <div class="product" data-name="headphones" data-category="Electronics">
                 <h3>Headphones</h3>
                 <p>Category: Electronics</p>
                 <p>Rs. 3,000</p>
                 <button>Add to Cart</button>
             </div>
 
-            <div class="product" data-name="t-shirt">
+            <div class="product" data-name="t-shirt" data-category="Clothing">
                 <h3>T-Shirt</h3>
                 <p>Category: Clothing</p>
                 <p>Rs. 1,000</p>
                 <button>Add to Cart</button>
             </div>
 
-            <div class="product" data-name="shoes">
+            <div class="product" data-name="shoes" data-category="Footwear">
                 <h3>Shoes</h3>
                 <p>Category: Footwear</p>
                 <p>Rs. 2,500</p>
