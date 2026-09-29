@@ -27,7 +27,7 @@ test('shows error when password is empty', async ({ page }) => {
     await page.goto('http://127.0.0.1:5500/app/index.html');
 
     await page.getByLabel('Email').fill('test@example.com');
-    await page.getByRole('button', { name: 'Login '}).click();
+    await page.getByRole('button', { name: 'Login'}).click();
 
     await expect(page.getByText('Password is required')).toBeVisible();
 });
