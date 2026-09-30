@@ -88,6 +88,7 @@ const cartItems = document.getElementById('cart-items');
 const cartTotal = document.getElementById('cart-total');
 const cartCount = document.getElementById('cart-count');
 const cartItemLabel = document.getElementById('cart-item-label');
+const clearCartButton = document.getElementById('clear-cart');
 
 const addToCartButtons = document.querySelectorAll('.product button');
 
@@ -117,18 +118,15 @@ function renderCart() {
                 renderCart();
             });
 
-            cartTotal.textContent = `Total: Rs. ${total}`;
-            cartCount.textContent = count;
-
-            cartItemLabel.textContent = count === 1 ? 'item' : 'items';
-
             cartItem.appendChild(removeButton);
 
             cartItems.appendChild(cartItem);
 
         });
 
-
+        cartTotal.textContent = `Total: Rs. ${total}`;
+        cartCount.textContent = count;
+        cartItemLabel.textContent = count === 1 ? 'item' : 'items';
 }
 
 addToCartButtons.forEach(button => {
@@ -153,3 +151,9 @@ addToCartButtons.forEach(button => {
         console.log(cart);
     });
 });
+
+clearCartButton.addEventListener('click', () => {
+    cart = [];
+    renderCart();
+});
+

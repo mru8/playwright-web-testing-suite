@@ -104,3 +104,21 @@ test('cart count updates with product quantity', async ({ page }) => {
 
     await expect(page.locator('#cart-count')).toHaveText('3');
 });
+
+test('user can clear the cart', async ({ page }) => {
+    await page.goto('http://127.0.0.1:5500/app/index.html');
+
+    await page.fill('#email', 'test@example.com');
+    await page.fill('#password', 'Test@123');
+    await page.click('button[type="submit"]');
+
+    await page.locator('.product').filter({ hasText: 'Laptop' }).getByRole('button', { name: 'Add to Cart'}).click();
+
+    await expect(page.locator('#cart-items')).toContainText('laptop');
+
+    await page.click('#clear-cart');
+    
+    await expect(page.locator('#cart-items')).toBeEmpty();
+    await expect(page.locator('#cart-total')).toHaveText('Total: Rs. 0');
+    await expect(page.locator('#cart-count')).toHaveText('0');
+})
