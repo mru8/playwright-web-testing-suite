@@ -53,7 +53,7 @@ test("user can decrease product quantity using remove button", async ({ page }) 
 
    const cartItem = page.locator('#cart-items div').filter({ hasText: 'laptop'});
 
-   await expect(cartItem).toHaveText('laptop - Quantity: 1Remove');
+   await expect(cartItem).toHaveText('laptop - Quantity: 1 - Price: Rs. 60000Remove');
 });
 
 test('user can remove product when quantity reaches zero', async ({ page }) => {
@@ -73,4 +73,19 @@ test('user can remove product when quantity reaches zero', async ({ page }) => {
     const cartItem = page.locator('#cart-items div').filter({ hasText: 'laptop' });
 
     await expect(cartItem).toHaveCount(0);
+});
+
+test('cart calculates total price correctly', async ({ page }) => {
+    await page.goto('http://127.0.0.1:5500/app/index.html');
+
+    await page.fill('#email', 'test@example.com');
+    await page.fill('#password', 'Test@123');
+
+    await page.click('button[type="submit"]');
+
+    await page.locator('.product[data-name="laptop"] button').click();
+    await page.locator('.product[data-name="laptop"] button').click();
+    await page.locator('.product[data-name="headphones"] button').click();
+    
+    await expect(page.locator('#cart-total')).toHaveText('Total: Rs. 123000');
 });
