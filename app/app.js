@@ -85,16 +85,20 @@ if (categoryFilter) {
 let cart = [];
 
 const cartItems = document.getElementById('cart-items');
+const cartTotal = document.getElementById('cart-total');
 
 const addToCartButtons = document.querySelectorAll('.product button');
 
 function renderCart() {
+        let total = 0;
         cartItems.innerHTML = '';
 
         cart.forEach(item => {
+            total += item.price * item.quantity;
+
             const cartItem = document.createElement('div');
 
-            cartItem.textContent = `${item.name} - Quantity: ${item.quantity}`;
+            cartItem.textContent = `${item.name} - Quantity: ${item.quantity} - Price: Rs. ${item.price * item.quantity }`;
 
             const removeButton = document.createElement('button');
 
@@ -109,6 +113,7 @@ function renderCart() {
                 renderCart();
             });
 
+            cartTotal.textContent = `Total: Rs. ${total}`;
             cartItem.appendChild(removeButton);
 
             cartItems.appendChild(cartItem);
@@ -122,6 +127,7 @@ addToCartButtons.forEach(button => {
     button.addEventListener('click', () => {
         const product = button.closest('.product');
         const productName = product.dataset.name;
+        const productPrice = Number(product.dataset.price);
 
         const existingProduct = cart.find(item => item.name === productName);
         if (existingProduct) {
@@ -129,6 +135,7 @@ addToCartButtons.forEach(button => {
         } else {
             cart.push({
                 name: productName,
+                price:productPrice,
                 quantity: 1
             });
         }
