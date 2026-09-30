@@ -86,15 +86,19 @@ let cart = [];
 
 const cartItems = document.getElementById('cart-items');
 const cartTotal = document.getElementById('cart-total');
+const cartCount = document.getElementById('cart-count');
+const cartItemLabel = document.getElementById('cart-item-label');
 
 const addToCartButtons = document.querySelectorAll('.product button');
 
 function renderCart() {
         let total = 0;
+        let count = 0;
         cartItems.innerHTML = '';
 
         cart.forEach(item => {
             total += item.price * item.quantity;
+            count += item.quantity;
 
             const cartItem = document.createElement('div');
 
@@ -114,6 +118,10 @@ function renderCart() {
             });
 
             cartTotal.textContent = `Total: Rs. ${total}`;
+            cartCount.textContent = count;
+
+            cartItemLabel.textContent = count === 1 ? 'item' : 'items';
+
             cartItem.appendChild(removeButton);
 
             cartItems.appendChild(cartItem);

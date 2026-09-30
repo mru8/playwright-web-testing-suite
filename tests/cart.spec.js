@@ -89,3 +89,18 @@ test('cart calculates total price correctly', async ({ page }) => {
     
     await expect(page.locator('#cart-total')).toHaveText('Total: Rs. 123000');
 });
+
+test('cart count updates with product quantity', async ({ page }) => {
+    await page.goto('http://127.0.0.1:5500/app/index.html');
+
+    await page.fill('#email', 'test@example.com');
+    await page.fill('#password', 'Test@123');
+    
+    await page.click('button[type="submit"]');
+
+    await page.locator('.product[data-name="laptop"] button').click();
+    await page.locator('.product[data-name="laptop"] button').click();
+    await page.locator('.product[data-name="headphones"] button').click();
+
+    await expect(page.locator('#cart-count')).toHaveText('3');
+});
