@@ -55,3 +55,22 @@ test("user can decrease product quantity using remove button", async ({ page }) 
 
    await expect(cartItem).toHaveText('laptop - Quantity: 1Remove');
 });
+
+test('user can remove product when quantity reaches zero', async ({ page }) => {
+    await page.goto('http://127.0.0.1:5500/app/index.html');
+
+    await page.fill('#email', 'test@example.com');
+    await page.fill('#password', 'Test@123');
+
+    await page.click('button[type="submit"]');
+
+    await page.locator('.product[data-name="laptop"] button').click();
+
+    const removeButton = page.getByRole('button', { name: 'Remove '});
+
+    await removeButton.click();
+
+    const cartItem = page.locator('#cart-items div').filter({ hasText: 'laptop' });
+
+    await expect(cartItem).toHaveCount(0);
+});
