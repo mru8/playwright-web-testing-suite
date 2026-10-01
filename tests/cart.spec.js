@@ -1,24 +1,20 @@
 const { test, expect } = require('@playwright/test');
-test("user can add a product to cart", async ({ page }) => {
+
+test.beforeEach(async ({ page }) => {
     await page.goto('http://127.0.0.1:5500/app/index.html');
 
-    await page.getByLabel('Email').fill('test@example.com');
-    await page.getByLabel('Password').fill('Test@123');
+    await page.fill('#email', 'test@example.com');
+    await page.fill('#password', 'Test@123');
 
-    await page.getByRole('button', { name: 'Login' }).click();
+    await page.click('button[type="submit"]');
+});
 
+test("user can add a product to cart", async ({ page }) => {
     await page.getByRole('button', { name: 'Add to Cart' }).first().click();
     await expect(page.getByText('laptop - Quantity: 1')).toBeVisible();
 });
 
 test("user can increase product quantity in cart", async ({ page }) => {
-    await page.goto('http://127.0.0.1:5500/app/index.html');
-
-    await page.getByLabel('Email').fill('test@example.com');
-    await page.getByLabel('Password').fill('Test@123');
-
-    await page.getByRole('button', { name: 'Login' }).click();
-
     await page.getByRole('button', { name: 'Add to Cart' }).first().click();
     await page.getByRole('button', { name: 'Add to Cart' }).first().click();
 
@@ -26,25 +22,12 @@ test("user can increase product quantity in cart", async ({ page }) => {
 });
 
 test("user can add different products to cart", async ({ page }) => {
-    await page.goto('http://127.0.0.1:5500/app/index.html');
-
-    await page.getByLabel('Email').fill('test@example.com')
-    await page.getByLabel('Password').fill('Test@123');
-
-    await page.getByRole('button', { name: 'Login' }).click();
-
     await page.getByRole('button', { name: 'Add to Cart'}).nth(1).click();
 
     await expect(page.getByText('headphones - Quantity: 1')).toBeVisible();
 });
 
 test("user can decrease product quantity using remove button", async ({ page }) => {
-   await page.goto('http://127.0.0.1:5500/app/index.html'); 
-
-   await page.fill('#email', 'test@example.com');
-   await page.fill('#password', 'Test@123');
-   await page.click('button[type="submit"]');
-
    await page.locator('.product[data-name="laptop"] button').click();
    await page.locator('.product[data-name="laptop"] button').click();
 
@@ -57,13 +40,6 @@ test("user can decrease product quantity using remove button", async ({ page }) 
 });
 
 test('user can remove product when quantity reaches zero', async ({ page }) => {
-    await page.goto('http://127.0.0.1:5500/app/index.html');
-
-    await page.fill('#email', 'test@example.com');
-    await page.fill('#password', 'Test@123');
-
-    await page.click('button[type="submit"]');
-
     await page.locator('.product[data-name="laptop"] button').click();
 
     const removeButton = page.getByRole('button', { name: 'Remove '});
@@ -76,13 +52,6 @@ test('user can remove product when quantity reaches zero', async ({ page }) => {
 });
 
 test('cart calculates total price correctly', async ({ page }) => {
-    await page.goto('http://127.0.0.1:5500/app/index.html');
-
-    await page.fill('#email', 'test@example.com');
-    await page.fill('#password', 'Test@123');
-
-    await page.click('button[type="submit"]');
-
     await page.locator('.product[data-name="laptop"] button').click();
     await page.locator('.product[data-name="laptop"] button').click();
     await page.locator('.product[data-name="headphones"] button').click();
@@ -91,13 +60,6 @@ test('cart calculates total price correctly', async ({ page }) => {
 });
 
 test('cart count updates with product quantity', async ({ page }) => {
-    await page.goto('http://127.0.0.1:5500/app/index.html');
-
-    await page.fill('#email', 'test@example.com');
-    await page.fill('#password', 'Test@123');
-    
-    await page.click('button[type="submit"]');
-
     await page.locator('.product[data-name="laptop"] button').click();
     await page.locator('.product[data-name="laptop"] button').click();
     await page.locator('.product[data-name="headphones"] button').click();
@@ -106,12 +68,6 @@ test('cart count updates with product quantity', async ({ page }) => {
 });
 
 test('user can clear the cart', async ({ page }) => {
-    await page.goto('http://127.0.0.1:5500/app/index.html');
-
-    await page.fill('#email', 'test@example.com');
-    await page.fill('#password', 'Test@123');
-    await page.click('button[type="submit"]');
-
     await page.locator('.product').filter({ hasText: 'Laptop' }).getByRole('button', { name: 'Add to Cart'}).click();
 
     await expect(page.locator('#cart-items')).toContainText('laptop');
