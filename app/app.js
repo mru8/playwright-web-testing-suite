@@ -62,6 +62,7 @@ if (searchButton) {
 }
 
 const categoryFilter = document.getElementById('category-filter');
+const sortProducts = document.getElementById('sort-products');
 
 if (categoryFilter) {
     categoryFilter.addEventListener('change', () => {
@@ -81,6 +82,27 @@ if (categoryFilter) {
         });
     });
 }
+
+sortProducts.addEventListener('change', () => {
+    const sortOption = sortProducts.value;
+    const productArray = Array.from(products);
+    const productList = products[0].parentElement;
+
+    productArray.sort((a, b) => {
+        const priceA = Number(a.dataset.price);
+        const priceB = Number(b.dataset.price);
+       
+        if (sortOption == 'price-low') {
+            return priceA - priceB;
+        } else if (sortOption == 'price-high') {
+            return priceB - priceA;
+        }
+    });
+
+    productArray.forEach(product => {
+        productList.appendChild(product);
+    });
+});
 
 let cart = [];
 
