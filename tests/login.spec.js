@@ -1,13 +1,13 @@
 import {test, expect} from '@playwright/test';
 
+const LoginPage = require('../pages/LoginPage');
+
 test('user can login with valid credentials', async ({ page }) => {
+    const loginPage = new LoginPage(page);
 
     await page.goto("http://127.0.0.1:5500/app/index.html");
     
-    await page.getByLabel('Email').fill('test@example.com');
-    await page.getByLabel('Password').fill('Test@123');
-
-    await page.getByRole('button', {name: 'Login'}).click();
+    await loginPage.login('test@example.com', 'Test@123');
 
     await expect(
         page.getByRole('heading', { name: 'Dashboard' })
@@ -33,22 +33,19 @@ test('shows error when password is empty', async ({ page }) => {
 });
 
 test('shows error for invalid credentials', async ({ page }) => {
+    const loginPage = new LoginPage(page);
     await page.goto('http://127.0.0.1:5500/app/index.html')
 
-    await page.getByLabel('Email').fill('wrong@example.com');
-    await page.getByLabel('Password').fill('Wrong@123');
-    await page.getByRole('button', {name:'Login'}).click();
-
+    await loginPage.login('wrong@example.com', 'Wrong@123');
     await expect(page.getByText('Invalid email or password')).toBeVisible();
 });
 
 test('user can logout from dasshboard', async({ page }) => {
+    const loginPage = new LoginPage(page);
+
     await page.goto('http://127.0.0.1:5500/app/index.html');
 
-    await page.getByLabel('Email').fill('test@example.com');
-    await page.getByLabel('Password').fill('Test@123');
-    await page.getByRole('button', { name: 'Login'}).click();
-
+    await loginPage.login('test@example.com', 'Test@123');
     await expect(page.getByRole('heading', { name: 'Dashboard' })).toBeVisible();
 
     await page.getByRole('button', { name: 'Logout' }).click();
