@@ -9,6 +9,8 @@ class DashboardPage {
         this.searchButton = page.getByRole('button', { name: 'Search'});
 
         this.categoryFilter = page.getByRole('combobox', { name: 'Filter by category:' });
+
+        this.sortDropdown = page.locator('#sort-products');
     }
 
     async searchProduct(product) {
@@ -19,6 +21,10 @@ class DashboardPage {
     async filterByCategory(category) {
         await this.categoryFilter.selectOption(category);
 
+    }
+
+    async sortProducts(sortOption) {
+        await this.sortDropdown.selectOption(sortOption);
     }
 }
 

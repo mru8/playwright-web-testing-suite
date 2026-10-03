@@ -1,18 +1,20 @@
 const { test, expect } = require('@playwright/test');
+const DashboardPage = require('../pages/DashboardPage');
+const LoginPage = require('../pages/LoginPage');
+
+test.beforeEach(async ({ page }) => {
+    const loginPage = new LoginPage(page);
+
+    await page.goto('http://127.0.0.1:5500/app/index.html');
+    await loginPage.login('test@example.com', 'Test@123');
+})
 
 test('user can sort products by price low to high', async ({ page }) => {
-    await page.goto('http://127.0.0.1:5500/app/index.html');
 
-    await page.locator('#email').fill('test@example.com');
-    await page.locator('#password').fill('Test@123');
-    await page.locator('button[type="submit"]').click();
+    const dashboardPage = new DashboardPage(page);
 
-    await expect(page).toHaveURL(/dashboard\.html/);
-
-    const sortDropdown = page.locator('#sort-products');
-
-    await sortDropdown.selectOption('price-low');
-
+    await dashboardPage.sortProducts('price-low');
+    
     const productList = page.locator('.product');
 
     const firstProductPrice = await productList.nth(0).getAttribute('data-price');
@@ -37,16 +39,10 @@ test('user can sort products by price low to high', async ({ page }) => {
 });
 
 test('user can sort products by price high to low', async ({ page }) => {
-    await page.goto('http://127.0.0.1:5500/app/index.html');
-    await page.locator('#email').fill('test@example.com');
-    await page.locator('#password').fill('Test@123');
-    await page.locator('button[type="submit"]').click();
 
-    await expect(page).toHaveURL(/dashboard\.html/);
+    const dashboardPage = new DashboardPage(page);
 
-    const sortDropdown = page.locator('#sort-products');
-
-    await sortDropdown.selectOption('price-high');
+    await dashboardPage.sortProducts('price-high');
 
     const productList = page.locator('.product');
 
