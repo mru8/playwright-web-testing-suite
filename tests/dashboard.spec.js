@@ -15,4 +15,5 @@ test('dashboard is visible after login', async ({ page }) => {
 
     await expect(dashboardPage.dashboardHeading).toBeVisible();
     await expect(dashboardPage.productsHeading).toBeVisible();
+    await expect(dashboardPage.searchInput).toBeVisible();
 });
