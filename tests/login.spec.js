@@ -46,6 +46,7 @@ test('user can logout from dasshboard', async({ page }) => {
     await page.goto('http://127.0.0.1:5500/app/index.html');
 
     await loginPage.login('test@example.com', 'Test@123');
+    
     await expect(page.getByRole('heading', { name: 'Dashboard' })).toBeVisible();
 
     await page.getByRole('button', { name: 'Logout' }).click();

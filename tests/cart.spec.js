@@ -1,15 +1,16 @@
 const { test, expect } = require('@playwright/test');
 
+const LoginPage = require('../pages/LoginPage');
+
+test.beforeEach(async ({ page }) => {
+    const loginPage = new LoginPage(page);
+
+    await page.goto('http://127.0.0.1:5500/app/index.html');
+    await loginPage.login('test@example.com', 'Test@123');
+})
 
 test.describe('Cart functionality', () => {
-    test.beforeEach(async ({ page }) => {
-    await page.goto('http://127.0.0.1:5500/app/index.html');
-
-    await page.fill('#email', 'test@example.com');
-    await page.fill('#password', 'Test@123');
-
-    await page.click('button[type="submit"]');
-});
+    
 
     test("user can add a product to cart", async ({ page }) => {
     await page.getByRole('button', { name: 'Add to Cart' }).first().click();
