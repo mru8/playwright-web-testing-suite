@@ -26,6 +26,25 @@ class DashboardPage {
     async sortProducts(sortOption) {
         await this.sortDropdown.selectOption(sortOption);
     }
+
+    async addProductToCart(productName){
+        await this.page
+            .locator(`.product[data-name="${productName}"]`)
+            .getByRole('button', { name: 'Add to Cart'})
+            .click();
+    }
+
+    async removeProductFromCart(productName) {
+        const cartItem = this.page
+            .locator('#cart-items div')
+            .filter({ hasText: productName });
+        
+        await cartItem.getByRole('button', { name: 'Remove' }).click();
+    }
+
+    async clearCart() {
+        await this.page.locator('#clear-cart').click();
+    }
 }
 
 module.exports = DashboardPage;

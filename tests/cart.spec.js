@@ -1,6 +1,7 @@
 const { test, expect } = require('@playwright/test');
 
 const LoginPage = require('../pages/LoginPage');
+const DashboardPage = require('../pages/DashboardPage');
 
 test.beforeEach(async ({ page }) => {
     const loginPage = new LoginPage(page);
@@ -13,29 +14,37 @@ test.describe('Cart functionality', () => {
     
 
     test("user can add a product to cart", async ({ page }) => {
-    await page.getByRole('button', { name: 'Add to Cart' }).first().click();
-    await expect(page.getByText('laptop - Quantity: 1')).toBeVisible();
+        const dashboardPage = new DashboardPage(page);
+
+        await dashboardPage.addProductToCart('laptop');
+        
+        await expect(page.getByText('laptop - Quantity: 1')).toBeVisible();
 });
 
 test("user can increase product quantity in cart", async ({ page }) => {
-    await page.getByRole('button', { name: 'Add to Cart' }).first().click();
-    await page.getByRole('button', { name: 'Add to Cart' }).first().click();
+    const dashboardPage = new DashboardPage(page);
+    
+    await dashboardPage.addProductToCart('laptop');
+    await dashboardPage.addProductToCart('laptop');
 
     await expect(page.getByText('laptop - Quantity: 2')).toBeVisible();
 });
 
 test("user can add different products to cart", async ({ page }) => {
-    await page.getByRole('button', { name: 'Add to Cart'}).nth(1).click();
+    const dashboardPage = new DashboardPage(page);
 
+    await dashboardPage.addProductToCart('headphones');
+    
     await expect(page.getByText('headphones - Quantity: 1')).toBeVisible();
 });
 
 test("user can decrease product quantity using remove button", async ({ page }) => {
-   await page.locator('.product[data-name="laptop"] button').click();
-   await page.locator('.product[data-name="laptop"] button').click();
+   const dashboardPage = new DashboardPage(page);
 
-   const removeButton = page.getByRole('button', { name: 'Remove' });
-   await removeButton.click();
+   await dashboardPage.addProductToCart('laptop');
+   await dashboardPage.addProductToCart('laptop');
+
+   await dashboardPage.removeProductFromCart('laptop');
 
    const cartItem = page.locator('#cart-items div').filter({ hasText: 'laptop'});
 
@@ -43,11 +52,11 @@ test("user can decrease product quantity using remove button", async ({ page }) 
 });
 
 test('user can remove product when quantity reaches zero', async ({ page }) => {
-    await page.locator('.product[data-name="laptop"] button').click();
+    const dashboardPage = new DashboardPage(page);
 
-    const removeButton = page.getByRole('button', { name: 'Remove '});
+    await dashboardPage.addProductToCart('laptop');
 
-    await removeButton.click();
+    await dashboardPage.removeProductFromCart('laptop');
 
     const cartItem = page.locator('#cart-items div').filter({ hasText: 'laptop' });
 
@@ -55,27 +64,33 @@ test('user can remove product when quantity reaches zero', async ({ page }) => {
 });
 
 test('cart calculates total price correctly', async ({ page }) => {
-    await page.locator('.product[data-name="laptop"] button').click();
-    await page.locator('.product[data-name="laptop"] button').click();
-    await page.locator('.product[data-name="headphones"] button').click();
+    const dashboardPage = new DashboardPage(page);
+   
+    await dashboardPage.addProductToCart('laptop');
+    await dashboardPage.addProductToCart('laptop');
+    await dashboardPage.addProductToCart('headphones');
     
     await expect(page.locator('#cart-total')).toHaveText('Total: Rs. 123000');
 });
 
 test('cart count updates with product quantity', async ({ page }) => {
-    await page.locator('.product[data-name="laptop"] button').click();
-    await page.locator('.product[data-name="laptop"] button').click();
-    await page.locator('.product[data-name="headphones"] button').click();
+    const dashboardPage = new DashboardPage(page);
+
+    await dashboardPage.addProductToCart('laptop');
+    await dashboardPage.addProductToCart('laptop');
+    await dashboardPage.addProductToCart('headphones');
 
     await expect(page.locator('#cart-count')).toHaveText('3');
 });
 
 test('user can clear the cart', async ({ page }) => {
-    await page.locator('.product').filter({ hasText: 'Laptop' }).getByRole('button', { name: 'Add to Cart'}).click();
+    const dashboardPage = new DashboardPage(page);
+
+    await dashboardPage.addProductToCart('laptop');
 
     await expect(page.locator('#cart-items')).toContainText('laptop');
 
-    await page.click('#clear-cart');
+    await dashboardPage.clearCart();
     
     await expect(page.locator('#cart-items')).toBeEmpty();
     await expect(page.locator('#cart-total')).toHaveText('Total: Rs. 0');
