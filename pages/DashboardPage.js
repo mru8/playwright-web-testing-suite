@@ -45,6 +45,10 @@ class DashboardPage {
     async clearCart() {
         await this.page.locator('#clear-cart').click();
     }
+
+    async logout() {
+        await this.page.getByRole('button', { name: 'Logout' }).click();
+    }
 }
 
 module.exports = DashboardPage;
