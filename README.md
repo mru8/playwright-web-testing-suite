@@ -19,7 +19,7 @@ Test login: `test@example.com` / `Test@123`
 | sort.spec.js | price low to high, high to low | 2 |
 | cart.spec.js | add, increase, decrease, remove, total, count, clear | 8 |
 
-Total: 63 tests, all running on every push through GitHub Actions.
+Total: 21 tests, all running on every push through GitHub Actions.
 
 ## Project structure
 
